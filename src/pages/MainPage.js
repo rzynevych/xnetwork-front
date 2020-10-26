@@ -1,4 +1,5 @@
 import React from 'react';
+import Message from '../messages/Message';
 
 class MainPage extends React.Component {
     constructor(props) {
@@ -7,7 +8,11 @@ class MainPage extends React.Component {
 
     render() {
         return (
-            <h1>Main Page!</h1>
+            <Message
+                username='Ruslan'
+                date='today'
+                text='Hello'
+            />
         )
     }
 }

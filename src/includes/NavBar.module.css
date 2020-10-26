@@ -1,0 +1,25 @@
+.nav {
+    height: 3em;
+    margin-top: 0.4em;
+    display: flex;
+    width: inherit;
+    justify-content: space-between;
+}
+
+.nav__button {
+    color: black;
+    font-size: 16pt;
+    text-decoration: none;
+    height: 30px;
+    padding-top: 5px;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    border-color: white;
+}
+
+.nav__button:hover {
+    display: block;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
+    border-color: grey;
+}

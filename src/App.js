@@ -6,22 +6,35 @@ import {
   Link,
   Redirect,
 } from 'react-router-dom';
+import NavBar from './includes/NavBar';
 import MainPage from './pages/MainPage';
+import Posts from './pages/Posts';
 import Login from './auth/Login';
-import './App.css';
-import { render } from '@testing-library/react';
-
+import { url } from './config';
+import s from './App.module.css';
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.checkIsAuth = this.checkIsAuth.bind(this);
-    this.isAuth = this.checkIsAuth();
+    this.isAuth = false;
+  }
+
+  componentDidMount() {
+    this.checkIsAuth();
   }
 
   checkIsAuth() {
-    return true;
+    fetch(url + '/auth_check',
+      {
+        method : 'GET',
+        credentials : 'include'
+      }
+    ).then(response => response.json()).then(json => {
+        this.isAuth = json.status;
+        this.forceUpdate();
+      })
   }
 
   render() {
@@ -29,16 +42,20 @@ class App extends React.Component {
       return (
         <Router>
           <Switch>
-            <Route exact path="/" render={ (props) => <Login/> }/>
+            <Route exact path="/" render={(props) => <Login checkIsAuth={this.checkIsAuth}/>}></Route>
           </Switch>
         </Router>
       );
     } else {
       return (
         <Router>
+          <div className={s.main__container}>
+          <NavBar/>
           <Switch>
-            <Route exact path="/" render={ (props) => <MainPage/> }/>
+            <Route exact path='/posts' component={Posts}></Route>
+            <Redirect to='/posts'/>
           </Switch>
+          </div>
         </Router>
       )
     }

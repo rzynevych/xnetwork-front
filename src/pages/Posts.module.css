@@ -1,0 +1,10 @@
+.items__container {
+    overflow-y: scroll;
+    flex-grow: 1;
+    display: block;
+    height: 90%;
+    width: inherit;
+    border-top: 1px solid #00000080;
+    padding-top: 0.5em;
+    box-sizing: border-box;
+}
