@@ -51,9 +51,9 @@ class Login extends React.Component {
             <div className={s.auth__form}>
                 <h2>ZNetwork login</h2>
                 <label className={s.form__label}>Enter email</label>
-                <input className={s.form__control} type='text' placeholder='Email' onChange={this.emailHandler}/>
+                <input className={s.form__control} type='text' name='email' placeholder='Email' onChange={this.emailHandler}/>
                 <label className={s.form__label}>Enter password</label>
-                <input className={s.form__control} type='password' placeholder='Password' onChange={this.passwordHandler}/>
+                <input className={s.form__control} type='password' name='password' placeholder='Password' onChange={this.passwordHandler}/>
                 <button className={s.auth__send__button} onClick={this.sendForm}>Login</button>
                 <Link to='/signup' className='reg__link'>Sign up</Link>
             </div>
