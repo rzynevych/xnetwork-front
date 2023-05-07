@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import { url } from '../config';
+import { server_url } from '../config';
 import s from './Login.module.css';
 
 class Login extends React.Component {
@@ -28,15 +28,15 @@ class Login extends React.Component {
         })
     }
 
-    // action="/j_spring_security_check"
     sendForm() {
-        let form = new FormData();
-        form.append('email', this.state.email);
-        form.append('password', this.state.password);
-        fetch(url + '/j_spring_security_check',
+
+        let payload = new FormData();
+        payload.append("email", this.state.email);
+        payload.append("password", this.state.password);
+        fetch(server_url + '/auth',
             {
                 method : 'POST',
-                body : form,
+                body : payload,
                 credentials : 'include'
             }
         ).then(response => response.json()).then(json => {
@@ -49,13 +49,15 @@ class Login extends React.Component {
     render() {
         return (
             <div className={s.auth__form}>
-                <h2>ZNetwork login</h2>
+                <h2>XNetwork login</h2>
                 <label className={s.form__label}>Enter email</label>
                 <input className={s.form__control} type='text' name='email' placeholder='Email' onChange={this.emailHandler}/>
                 <label className={s.form__label}>Enter password</label>
                 <input className={s.form__control} type='password' name='password' placeholder='Password' onChange={this.passwordHandler}/>
                 <button className={s.auth__send__button} onClick={this.sendForm}>Login</button>
-                <Link to='/signup' className='reg__link'>Sign up</Link>
+                <div className={s.reg__link}>
+                <Link to='/registration'>Sign up</Link>
+                </div>
             </div>
         )
     }

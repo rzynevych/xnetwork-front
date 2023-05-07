@@ -9,25 +9,25 @@
     box-sizing: border-box;
 }
 
-.post__input__container {
+.query__input__container {
     display: flex;
     height: 2em;
     width: inherit;
     border-top: 1px solid #00000080;
 }
 
-.post__input {
+.query__input {
     display: block;
     height: inherit;
-    width: 90%;
+    width: 85%;
     border-top: 1px solid #00000080;
     box-sizing: border-box;
 }
 
-.post__send__button {
+.query__send__button {
     display: block;
     height: inherit;
-    width: 10%;
+    width: auto;
     border-top: 1px solid #00000080;
     box-sizing: border-box;
 }

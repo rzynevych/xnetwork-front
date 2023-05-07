@@ -1,3 +1,8 @@
+.chat__container {  
+    width: inherit;
+    height: 90%;
+}
+
 .items__container {
     overflow-y: scroll;
     flex-grow: 1;
@@ -7,27 +12,27 @@
     border-top: 1px solid #00000080;
     padding-top: 0.5em;
     box-sizing: border-box;
+    flex-grow: 1;
 }
 
-.post__input__container {
+.message__input__container {
     display: flex;
     height: 2em;
     width: inherit;
     border-top: 1px solid #00000080;
 }
 
-.post__input {
-    display: block;
+.message__input {
+    float: left;
     height: inherit;
-    width: 90%;
+    width: 85%;
     border-top: 1px solid #00000080;
     box-sizing: border-box;
 }
 
-.post__send__button {
-    display: block;
+.message__send__button {
     height: inherit;
-    width: 10%;
+    flex-grow: 1;
     border-top: 1px solid #00000080;
     box-sizing: border-box;
 }

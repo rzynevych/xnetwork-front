@@ -1,0 +1,24 @@
+.chat__list__elem {
+    display: block;
+    margin-right: 5px;
+}
+
+.cle__header {
+    display: flex;
+    margin-bottom: 10px
+}
+
+.cle__username {
+    margin-left: 0;
+    margin-right: auto;
+    font-size: 20pt;
+    padding: 0;
+}
+
+.cle__divider {
+    display: block;
+    height: 0;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+    margin: 2% 0;
+}
