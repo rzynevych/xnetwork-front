@@ -18,6 +18,7 @@ class Posts extends React.Component {
     }
 
     componentDidMount() {
+        // changed
         let url = new URL(server_url + '/getOwnPosts');
         url.searchParams.append('page', this.page);
         url.searchParams.append('size', this.size);
