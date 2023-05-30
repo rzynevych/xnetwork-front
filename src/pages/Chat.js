@@ -12,8 +12,8 @@ class Chat extends React.Component {
         this.sendMessage = this.sendMessage.bind(this);
         this.getNewMessages = this.getNewMessages.bind(this);
         this.websocketHook = this.websocketHook.bind(this);
-        this.limit = 50;
-        this.offset = 0;
+        this.page = 0;
+        this.size = 50;
         this.converser_id = 0;
         this.messagesContainer = React.createRef();
         this.updated = false;
@@ -31,21 +31,17 @@ class Chat extends React.Component {
             hook: this.websocketHook
         })
         let url = new URL(server_url + '/getChatMessages');
-        url.searchParams.append('converser_id', this.converser_id);
-        url.searchParams.append('limit', this.limit);
-        url.searchParams.append('offset', this.offset);
+        url.searchParams.append('converserId', this.converser_id);
+        url.searchParams.append('page', this.page);
+        url.searchParams.append('size', this.size);
         fetch(url,
             {
                 method: "GET",
                 credentials: 'include'
             }).then(response => response.json()).then(json => {
-            if (json.status) {
-                this.offset += this.limit;
-                json.data.reverse().map(m => this.state.messages.push(m));
-                this.forceUpdate();
-            }
-            else
-                console.log(json.error);
+            this.page += 1;
+            json.map(m => this.state.messages.push(m));
+            this.forceUpdate();
         }).then(() => {this.messagesContainer.current.lastElementChild.scrollIntoView(
             { behavior: "smooth", block: "nearest" })}).catch(console.log);
     }
@@ -59,52 +55,48 @@ class Chat extends React.Component {
     sendMessage() {
         if (this.state.messageText.length === 0)
             return ;
-        let url = new URL(server_url + '/sendMessage');
+        let url = new URL(server_url + '/uploadMessage');
         let payload = {
-            converser_id : this.converser_id,
+            converserId : this.converser_id,
             text : this.state.messageText
         }
         fetch(url,
             {
                 method: "POST",
                 body: JSON.stringify(payload),
-                credentials: 'include'
+                credentials: 'include',
+                headers: {
+                    "Content-Type": "application/json"
+                },
             }).then(response => response.json()).then(json => {
-            if (json.status === true) {
+                this.state.messages.push(json);
                 this.setState({
                         messageText : ''
                 });
-                this.getNewMessages();
-                console.log(json);
-            }
-            else
-                console.log(json.error);
+            console.log(json);
         }).catch(console.log);
     }
 
     getNewMessages() {
         let url = new URL(server_url + '/getNewMessages');
-        url.searchParams.append('converser_id', this.converser_id);
-        let last_message_id = this.state.messages[this.state.messages.length - 1].message_id;
-        url.searchParams.append('last_message_id', last_message_id);
+        url.searchParams.append('converserId', this.converser_id);
+        let last_message_id = this.state.messages[this.state.messages.length - 1].messageId;
+        url.searchParams.append('lastMessageId', last_message_id);
         fetch(url,
             {
                 method: "GET",
                 credentials: 'include'
             }).then(response => response.json()).then(json => {
-            if (json.status === true) {
-                json.data.map(m => {this.state.messages.push(m)});
-                this.forceUpdate();
-                console.log(json);
-            }
-            else
-                console.log(json.error);
+            json.map(m => {this.state.messages.push(m)});
+            this.forceUpdate();
+            console.log(json);
         }).then(() => {this.messagesContainer.current.lastElementChild.scrollIntoView(
             { behavior: "smooth", block: "nearest" })}).catch(console.log);
     }
 
     websocketHook(wsMessage) {
-        if (wsMessage.sender_id === this.converser_id)
+        console.log(wsMessage);
+        if (wsMessage.converserID === this.converser_id)
             this.getNewMessages();
     }
 
@@ -114,8 +106,8 @@ class Chat extends React.Component {
             <div ref={this.messagesContainer} className={s.items__container}>
                 {this.state.messages.map(m => 
                     <Message
-                        key={m.message_id}
-                        username={m.sender_name}
+                        key={m.messageId}
+                        username={m.senderName}
                         date={m.date}
                         text={m.text}
                     />

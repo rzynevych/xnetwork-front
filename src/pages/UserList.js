@@ -9,12 +9,17 @@ class UserList extends React.Component {
         super(props);
         this.queryInputHandler = this.queryInputHandler.bind(this);
         this.sendQuery = this.sendQuery.bind(this);
-        this.limit = 50;
-        this.offset = 0;
+        this.doSendQuery = this.doSendQuery.bind(this);
+        this.page = 0;
+        this.size = 50;
         this.state = {
             users : [],
             queryText : ""
         }
+    }
+
+    componentDidMount() {
+        this.doSendQuery();
     }
 
     queryInputHandler(e) {
@@ -26,8 +31,13 @@ class UserList extends React.Component {
     sendQuery() {
         if (this.state.queryText.length === 0)
             return ;
+        this.doSendQuery();
+    }
+
+    doSendQuery() {
         let url = new URL(server_url + '/getUsersByQuery');
-        url.searchParams.set('offset', this.offset);
+        url.searchParams.set('page', this.page);
+        url.searchParams.set('size', this.size);
         url.searchParams.set('query', this.state.queryText);
         fetch(url,
             {
@@ -36,7 +46,7 @@ class UserList extends React.Component {
             }).then(response => response.json()).then(json => {
             if (!json.error) {
                 // console.log(json);
-                this.offset += json.length;
+                this.page++;
                 this.setState({
                         users : json,
                         queryText : ""
@@ -60,7 +70,7 @@ class UserList extends React.Component {
                 </div>
                 {this.state.users.map(u => 
                     <UserListElem
-                        key={u.user.userID}
+                        key={u.user.userId}
                         elem={u}
                     />
                 )}

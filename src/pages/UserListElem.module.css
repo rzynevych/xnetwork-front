@@ -15,6 +15,23 @@
     padding: 0;
 }
 
+.ule__subscription {
+    font-size: 10pt;
+    color: rgba(0, 0, 0, 0.5);
+    padding: 0;
+    margin-top: 8pt;
+}
+
+.ule__button__container {
+    display: flex;
+}
+
+.ule__subscription__button {
+    margin-left: auto;
+    margin-right: 1em;
+    display: block;
+}
+
 .ule__divider {
     display: block;
     height: 0;

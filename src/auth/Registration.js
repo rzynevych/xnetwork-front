@@ -36,16 +36,19 @@ class Registration extends React.Component {
     }
 
     sendForm() {
-        let data = new FormData();
-        data.append("email", this.state.email);
-        data.append("username", this.state.username);
-        data.append("password", this.state.password);
-        
+        let payload = {
+            email : this.state.email,
+            username : this.state.username,
+            password : this.state.password
+        }
         let url = new URL(server_url + '/register');
         fetch(url,
             {
                 method: "POST",
-                body: data
+                body: JSON.stringify(payload),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             }).then(response => response.json()).then(json => {
                 console.log(json);
                 this.setState({

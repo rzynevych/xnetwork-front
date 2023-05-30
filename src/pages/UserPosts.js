@@ -4,9 +4,10 @@ import { server_url } from '../config';
 import s from './Posts.module.css';
 import { withRouter } from 'react-router-dom';
 
-class Posts extends React.Component {
+class UserPosts extends React.Component {
     constructor(props) {
         super(props);
+        this.sendPost = this.sendPost.bind(this);
         this.postInputHandler = this.postInputHandler.bind(this);
         this.page = 0;
         this.size = 50;
@@ -17,7 +18,7 @@ class Posts extends React.Component {
     }
 
     componentDidMount() {
-        let url = new URL(server_url + '/getPosts');
+        let url = new URL(server_url + '/getOwnPosts');
         url.searchParams.append('page', this.page);
         url.searchParams.append('size', this.size);
         fetch(url,
@@ -26,7 +27,7 @@ class Posts extends React.Component {
                 credentials: 'include'
             }).then(response => response.json()).then(json => {
             if (!json.error) {
-                this.page++;
+                this.page += 1;
                 this.setState({
                     messages : json
                 });
@@ -42,9 +43,47 @@ class Posts extends React.Component {
         });
     }
 
+    sendPost() {
+        if (this.state.postText.length === 0)
+            return ;
+        let url = new URL(server_url + '/uploadPost');
+        let payload = {
+            converserID : 0,
+            text : this.state.postText
+        }
+        fetch(url,
+            {
+                method: "POST",
+                mode: "cors",
+                body: JSON.stringify(payload),
+                credentials: 'include',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            }).then(response => response.json()).then(json => {
+            if (!json.error) {
+                this.state.messages.unshift(json);
+                this.setState({
+                    postText : ""
+                });
+                console.log(json);
+            }
+            else
+                console.log(json.error);
+        }).catch(console.log);
+    }
+
     render() {
         return (
             <div>
+                <div className={s.post__input__container}>
+                <input 
+                    className={s.post__input}
+                    onChange={this.postInputHandler}
+                    value={this.state.postText}
+                />
+                <button onClick={this.sendPost} className={s.post__send__button}>Send</button>
+                </div>
                 <div className={s.items__container}>
                     {this.state.messages.map(m => 
                         <Message
@@ -60,4 +99,4 @@ class Posts extends React.Component {
     }
 }
 
-export default withRouter(Posts);
+export default withRouter(UserPosts);
